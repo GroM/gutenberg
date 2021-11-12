@@ -46,6 +46,7 @@ import { GlobalStylesProvider } from '../global-styles/global-styles-provider';
 
 const interfaceLabels = {
 	secondarySidebar: __( 'Block Library' ),
+	drawer: __( 'Navigation Sidebar' ),
 };
 
 function Editor( { initialSettings, onError } ) {
@@ -219,11 +220,7 @@ function Editor( { initialSettings, onError } ) {
 														<ComplementaryArea.Slot scope="core/edit-site" />
 													)
 												}
-												drawer={
-													<NavigationSidebar
-														defaultIsOpen={ false }
-													/>
-												}
+												drawer={ <NavigationSidebar /> }
 												header={
 													<Header
 														openEntitiesSavedStates={

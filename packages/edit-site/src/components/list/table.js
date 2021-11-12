@@ -12,7 +12,11 @@ import {
 	__experimentalHeading as Heading,
 } from '@wordpress/components';
 import { moreVertical } from '@wordpress/icons';
-import { addQueryArgs } from '@wordpress/url';
+
+/**
+ * Internal dependencies
+ */
+import Link from '../routes/link';
 
 export default function Table( { templateType } ) {
 	const { templates, isLoading, postType } = useSelect(
@@ -69,15 +73,14 @@ export default function Table( { templateType } ) {
 				<li key={ template.id }>
 					<HStack className="edit-site-list-table-row">
 						<FlexItem className="edit-site-list-table-column">
-							<a
-								href={ addQueryArgs( '', {
-									page: 'gutenberg-edit-site',
+							<Link
+								params={ {
 									postId: template.id,
 									postType: template.type,
-								} ) }
+								} }
 							>
 								{ template.title.rendered }
-							</a>
+							</Link>
 							{ template.description }
 						</FlexItem>
 

@@ -116,11 +116,11 @@ export function getHomeTemplateId( state ) {
 }
 
 function getCurrentEditedPost( state ) {
-	return state.editedPost[ state.editedPost.length - 1 ] || {};
+	return state.editedPost;
 }
 
 function getPreviousEditedPost( state ) {
-	return state.editedPost[ state.editedPost.length - 2 ] || {};
+	return state.previousEditedPost;
 }
 
 /**
@@ -153,7 +153,7 @@ export function getEditedPostId( state ) {
  * @return {TemplateType?} Template type.
  */
 export function getPreviousEditedPostType( state ) {
-	return getPreviousEditedPost( state ).type;
+	return getPreviousEditedPost( state ).postType;
 }
 
 /**
@@ -164,7 +164,7 @@ export function getPreviousEditedPostType( state ) {
  * @return {string?} Post ID.
  */
 export function getPreviousEditedPostId( state ) {
-	return getPreviousEditedPost( state ).id;
+	return getPreviousEditedPost( state ).postId;
 }
 
 /**

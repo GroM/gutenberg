@@ -19,6 +19,7 @@ import {
 import './plugins';
 import './hooks';
 import './store';
+import { Routes } from './components/routes';
 import Editor from './components/editor';
 import List from './components/list';
 
@@ -34,25 +35,27 @@ export function reinitializeEditor( target, settings ) {
 	unmountComponentAtNode( target );
 	const reboot = reinitializeEditor.bind( null, target, settings );
 	render(
-		<Editor initialSettings={ settings } onError={ reboot } />,
+		<Routes>
+			{ ( { postType, postId } ) => {
+				if ( ! postId && postType ) {
+					return <List templateType={ postType } />;
+				}
+				return (
+					<Editor initialSettings={ settings } onError={ reboot } />
+				);
+			} }
+		</Routes>,
 		target
 	);
 }
 
-/**
- * Initializes the site editor screen.
- *
- * @param {string} id       ID of the root element to render the screen in.
- * @param {Object} settings Editor settings.
- */
-export function initializeEditor( id, settings ) {
+export function initialize( id, settings ) {
 	settings.__experimentalFetchLinkSuggestions = ( search, searchOptions ) =>
 		fetchLinkSuggestions( search, searchOptions, settings );
 	settings.__experimentalFetchRichUrlData = fetchUrlData;
 	settings.__experimentalSpotlightEntityBlocks = [ 'core/template-part' ];
 
 	const target = document.getElementById( id );
-	const reboot = reinitializeEditor.bind( null, target, settings );
 
 	dispatch( blocksStore ).__experimentalReapplyBlockTypeFilters();
 	registerCoreBlocks();
@@ -62,22 +65,7 @@ export function initializeEditor( id, settings ) {
 		} );
 	}
 
-	render(
-		<Editor initialSettings={ settings } onError={ reboot } />,
-		target
-	);
-}
-
-/**
- * Initializes the site editor templates list screen.
- *
- * @param {string} id           ID of the root element to render the screen in.
- * @param {string} templateType The type of the list. "wp_template" or "wp_template_part".
- */
-export function initializeList( id, templateType ) {
-	const target = document.getElementById( id );
-
-	render( <List templateType={ templateType } />, target );
+	reinitializeEditor( target, settings );
 }
 
 export { default as __experimentalMainDashboardButton } from './components/main-dashboard-button';

@@ -15,6 +15,8 @@ import { __, sprintf } from '@wordpress/i18n';
  * Internal dependencies
  */
 import { store as editSiteStore } from '../../store';
+import { useLink } from '../routes/link';
+import { useSearchParams } from '../routes';
 
 export default function EditTemplatePartMenuButton() {
 	return (
@@ -49,8 +51,13 @@ function EditTemplatePartMenuItem( { selectedClientId, onClose } ) {
 		},
 		[ selectedClientId ]
 	);
-
+	const currentSearchParams = useSearchParams();
 	const { pushTemplatePart } = useDispatch( editSiteStore );
+
+	const { href, onClick } = useLink( {
+		postId: selectedTemplatePart.id,
+		postType: 'wp_template_part',
+	} );
 
 	if ( ! selectedTemplatePart ) {
 		return null;
@@ -58,8 +65,10 @@ function EditTemplatePartMenuItem( { selectedClientId, onClose } ) {
 
 	return (
 		<MenuItem
-			onClick={ () => {
-				pushTemplatePart( selectedTemplatePart.id );
+			href={ href }
+			onClick={ ( event ) => {
+				onClick( event );
+				pushTemplatePart( currentSearchParams );
 				onClose();
 			} }
 		>

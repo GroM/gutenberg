@@ -3,13 +3,14 @@
  */
 import { Button } from '@wordpress/components';
 import { arrowLeft } from '@wordpress/icons';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
 import { store as editSiteStore } from '../../store';
+import { back } from '../routes/history';
 
 function BackButton() {
 	const { isTemplatePart, previousTemplateId } = useSelect( ( select ) => {
@@ -22,7 +23,6 @@ function BackButton() {
 			previousTemplateId: getPreviousEditedPostId(),
 		};
 	}, [] );
-	const { goBack } = useDispatch( editSiteStore );
 
 	if ( ! isTemplatePart || ! previousTemplateId ) {
 		return null;
@@ -33,7 +33,7 @@ function BackButton() {
 			className="edit-site-visual-editor__back-button"
 			icon={ arrowLeft }
 			onClick={ () => {
-				goBack();
+				back();
 			} }
 		>
 			{ __( 'Back' ) }

@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { useSelect } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
 import {
 	Button,
 	Icon,
@@ -12,25 +12,35 @@ import { wordpress } from '@wordpress/icons';
 import { store as coreDataStore } from '@wordpress/core-data';
 import { useReducedMotion } from '@wordpress/compose';
 
-function NavigationToggle( { icon, isOpen, setIsOpen } ) {
-	const { isRequestingSiteIcon, siteIconUrl } = useSelect( ( select ) => {
-		const { getEntityRecord, isResolving } = select( coreDataStore );
-		const siteData =
-			getEntityRecord( 'root', '__unstableBase', undefined ) || {};
+/**
+ * Internal dependencies
+ */
+import { store as editSiteStore } from '../../../store';
 
-		return {
-			isRequestingSiteIcon: isResolving( 'core', 'getEntityRecord', [
-				'root',
-				'__unstableBase',
-				undefined,
-			] ),
-			siteIconUrl: siteData.site_icon_url,
-		};
-	}, [] );
+function NavigationToggle( { icon } ) {
+	const { isRequestingSiteIcon, isOpen, siteIconUrl } = useSelect(
+		( select ) => {
+			const { getEntityRecord, isResolving } = select( coreDataStore );
+			const siteData =
+				getEntityRecord( 'root', '__unstableBase', undefined ) || {};
+
+			return {
+				isRequestingSiteIcon: isResolving( 'core', 'getEntityRecord', [
+					'root',
+					'__unstableBase',
+					undefined,
+				] ),
+				isOpen: select( editSiteStore ).isNavigationOpened(),
+				siteIconUrl: siteData.site_icon_url,
+			};
+		},
+		[]
+	);
+	const { setIsNavigationPanelOpened } = useDispatch( editSiteStore );
 
 	const disableMotion = useReducedMotion();
 
-	const toggleNavigationPanel = () => setIsOpen( ( open ) => ! open );
+	const toggleNavigationPanel = () => setIsNavigationPanelOpened( ! isOpen );
 
 	let buttonIcon = <Icon size="36px" icon={ wordpress } />;
 

@@ -1,14 +1,14 @@
 /**
  * WordPress dependencies
  */
-import { InterfaceSkeleton } from '@wordpress/interface';
+import { InterfaceSkeleton, FullscreenMode } from '@wordpress/interface';
 import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
+import NavigationSidebar from '../navigation-sidebar/';
 import Header from './header';
-import NavigationSidebar from '../navigation-sidebar';
 import Table from './table';
 
 export default function List( { templateType } ) {
@@ -27,6 +27,7 @@ export default function List( { templateType } ) {
 			}
 			content={
 				<main className="edit-site-list-main">
+					<FullscreenMode isActive />
 					<Table templateType={ templateType } />
 				</main>
 			}

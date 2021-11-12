@@ -14,16 +14,24 @@ import { moreVertical } from '@wordpress/icons';
 import { store as editSiteStore } from '../../store';
 import { TEMPLATE_PART_AREA_TO_NAME } from '../../store/constants';
 import isTemplateRevertable from '../../utils/is-template-revertable';
+import { useSearchParams } from '../routes';
+import { useLink } from '../routes/link';
 
 function TemplatePartItemMore( {
 	onClose,
 	templatePart,
 	closeTemplateDetailsDropdown,
 } ) {
-	const { pushTemplatePart, revertTemplate } = useDispatch( editSiteStore );
+	const { revertTemplate, pushTemplatePart } = useDispatch( editSiteStore );
+	const currentSearchParams = useSearchParams();
+	const { href, onClick } = useLink( {
+		postId: templatePart.id,
+		postType: 'wp_template_part',
+	} );
 
-	function editTemplatePart() {
-		pushTemplatePart( templatePart.id );
+	function editTemplatePart( event ) {
+		onClick( event );
+		pushTemplatePart( currentSearchParams );
 		onClose();
 		closeTemplateDetailsDropdown();
 	}
@@ -37,7 +45,7 @@ function TemplatePartItemMore( {
 	return (
 		<>
 			<MenuGroup>
-				<MenuItem onClick={ editTemplatePart }>
+				<MenuItem href={ href } onClick={ editTemplatePart }>
 					{ sprintf(
 						/* translators: %s: template part title */
 						__( 'Edit %s' ),
